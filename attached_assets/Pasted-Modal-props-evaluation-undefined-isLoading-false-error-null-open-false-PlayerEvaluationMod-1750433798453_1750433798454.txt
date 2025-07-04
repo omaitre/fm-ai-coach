@@ -1,0 +1,27 @@
+Modal props: {evaluation: undefined, isLoading: false, error: null, open: false}
+PlayerEvaluationModal.tsx:83 State check: {isLoading: false, error: false, evaluation: false}
+PlayerEvaluationModal.tsx:95 Final modal state: empty
+PlayerEvaluationModal.tsx:79 Modal props: {evaluation: undefined, isLoading: false, error: null, open: false}
+PlayerEvaluationModal.tsx:83 State check: {isLoading: false, error: false, evaluation: false}
+PlayerEvaluationModal.tsx:95 Final modal state: empty
+PlayerEvaluationModal.tsx:79 Modal props: {evaluation: undefined, isLoading: true, error: null, open: true}
+PlayerEvaluationModal.tsx:83 State check: {isLoading: true, error: false, evaluation: false}
+PlayerEvaluationModal.tsx:95 Final modal state: loading
+@radix-ui_react-dialog.js?v=2c0b3efb:342 Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+(anonymous) @ @radix-ui_react-dialog.js?v=2c0b3efb:342
+commitHookEffectListMount @ chunk-WERSD76P.js?v=2c0b3efb:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=2c0b3efb:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=2c0b3efb:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=2c0b3efb:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=2c0b3efb:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=2c0b3efb:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=2c0b3efb:19447
+commitRootImpl @ chunk-WERSD76P.js?v=2c0b3efb:19416
+commitRoot @ chunk-WERSD76P.js?v=2c0b3efb:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2c0b3efb:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2c0b3efb:9119
+(anonymous) @ chunk-WERSD76P.js?v=2c0b3efb:18627
+PlayerEvaluationModal.tsx:79 Modal props: {evaluation: Response, isLoading: false, error: null, open: true}
+PlayerEvaluationModal.tsx:83 State check: {isLoading: false, error: false, evaluation: true}
+PlayerEvaluationModal.tsx:89 Validation result: false Response {type: 'basic', url: 'https://1e31a61c-57df-46fb-8392-516080ef91c7-00-2zrv7j0kyt8me.kirk.replit.dev/api/tactics/1/evaluate', redirected: false, status: 200, ok: true, …}
+PlayerEvaluationModal.tsx:95 Final modal state: invalid

@@ -1,0 +1,15 @@
+I need you to analyze the current FM Player Tracker codebase and create a sequential implementation plan to address the following UI/UX feedback for the squad overview screen table. Please:
+
+Understand each change listed below
+Identify the specific fix needed for each issue
+Create a logical sequence for implementing these fixes (considering dependencies - if fix A solves issue B, do A first; if fix D would break something needed for fix C, do D before C)
+Guide me through each fix step-by-step (explain the fix, ask me to proceed, have me test, then move to next)
+
+Feedback to Address:
+Issue 1 - Table Header Visual Hierarchy: The primary table headers (Name to PA, and Technical/Mental/Physical/Goalkeeping categories) look identical to secondary headers (individual attributes within expanded sections). This creates confusion about where categories start and end. Need visual differentiation between primary and secondary headers.
+Issue 2 - Goalkeeping Category Order: Move the Goalkeeping attributes category to appear between Technical and Mental attributes (currently it's after Physical).
+Issue 3 - Empty Goalkeeping Category: The Goalkeeping category contains no attributes and therefore shows no average value. This needs to be addressed.
+Issue 4 - Attribute Name Length: Some attribute names span two lines in headers (e.g., "Penalty Taking", "Free Kick Taking"). Fix by using acronyms, truncation, or smaller text - choose the most elegant UI solution.
+Issue 5 - CA/PA Circle Display Issues: The CA/PA circles are not elegant - numbers are too large relative to circle size, causing three-digit numbers to overlap (e.g., Hugo Pennell's "168" PA overlaps the circle border). Solution: Make circles larger and remove the "CA" and "PA" labels within rows since they're already column headers.
+Issue 6 - Player Name Display: Player names should fit on one row. Resize the name column as needed to prevent text wrapping.
+Please analyze the current code, determine the implementation order for these fixes, and then walk me through them one by one, starting with your recommended sequence and asking for my approval before proceeding with each fix.

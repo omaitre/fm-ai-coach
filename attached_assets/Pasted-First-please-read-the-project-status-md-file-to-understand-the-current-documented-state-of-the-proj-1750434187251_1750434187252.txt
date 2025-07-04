@@ -1,0 +1,30 @@
+First, please read the project_status.md file to understand the current documented state of the project.
+Update Instructions:
+Please update the project_status.md file to reflect ALL changes, additions, and implementations that have been made during this coding session since you first read the file.
+Requirements:
+
+Preserve the existing structure - Keep all existing sections, headings, and organization intact
+Update ALL relevant sections to accurately reflect the current state of the project
+Add new features to the "✅ Current Features Implemented" section
+Move completed items from "Next Steps / Roadmap" to implemented features if they were completed
+Update status indicators (✅ for completed, 🔄 for in-progress, ❌ for issues encountered)
+Reflect any new technical components added to the architecture sections
+Update database schema if new tables, columns, or relationships were added
+Add any new API endpoints created during this session
+Update frontend components list with new components or major modifications
+Note any new dependencies or technical changes
+Update testing status based on what was tested during this session
+Revise known issues - remove resolved issues, add any new ones discovered
+Update the summary to reflect the current project state
+
+Key Requirements:
+
+Be comprehensive - include EVERYTHING that was implemented, modified, or discovered
+Be accurate - only mark things as completed if they actually work
+Maintain the professional tone and detailed technical descriptions
+Keep the file as a complete project reference that someone could use to understand the entire current state
+Ensure version numbers, dependencies, and technical specifications are current
+
+Please review the entire codebase, all files that were modified, all features that were implemented, and all discussions that occurred to create a complete and accurate update to the project status file.
+
+Please recap what you understood from this request and the current project state, then wait for me to instruct you to proceed with the changes.

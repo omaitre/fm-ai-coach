@@ -1,0 +1,78 @@
+{
+  "positions": {
+    "ML": {
+      "name": "Midfielder (Left)",
+      "roles": {
+        "IW": {
+          "name": "Inverted Winger",
+          "duties": {
+            "support": {
+              "key_attributes": ["Dribbling", "Passing", "Technique", "Off The Ball", "Acceleration"],
+              "preferred_attributes": ["Crossing", "First Touch", "Long Shots", "Composure", "Decisions", "Vision", "Work Rate", "Agility", "Pace", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "Passing", "Technique", "Off The Ball", "Acceleration", "Agility"],
+              "preferred_attributes": ["Crossing", "First Touch", "Long Shots", "Composure", "Decisions", "Vision", "Anticipation", "Flair", "Pace"]
+            }
+          }
+        },
+        "DW": {
+          "name": "Defensive Winger",
+          "duties": {
+            "support": {
+              "key_attributes": ["Crossing", "Technique", "Off The Ball", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Dribbling", "First Touch", "Marking", "Tackling", "Passing", "Aggression", "Anticipation", "Concentration", "Composure", "Decisions", "Positioning", "Acceleration"]
+            },
+            "defend": {
+              "key_attributes": ["Technique", "Anticipation", "Off The Ball", "Positioning", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Crossing", "Dribbling", "First Touch", "Marking", "Tackling", "Aggression", "Concentration", "Decisions", "Acceleration"]
+            }
+          }
+        },
+        "W": {
+          "name": "Winger",
+          "duties": {
+            "support": {
+              "key_attributes": ["Crossing", "Dribbling", "Technique", "Off The Ball", "Acceleration", "Pace"],
+              "preferred_attributes": ["First Touch", "Passing", "Work Rate", "Agility", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Crossing", "Dribbling", "Technique", "Off The Ball", "Acceleration", "Pace"],
+              "preferred_attributes": ["First Touch", "Passing", "Anticipation", "Flair", "Agility", "Stamina"]
+            }
+          }
+        },
+        "WM": {
+          "name": "Wide Midfielder",
+          "duties": {
+            "support": {
+              "key_attributes": ["Passing", "Tackling", "Decisions", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Crossing", "First Touch", "Technique", "Anticipation", "Composure", "Concentration", "Off The Ball", "Positioning", "Vision"]
+            },
+            "defend": {
+              "key_attributes": ["Passing", "Tackling", "Concentration", "Decisions", "Positioning", "Teamwork", "Work Rate"],
+              "preferred_attributes": ["Crossing", "First Touch", "Marking", "Technique", "Anticipation", "Composure", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Crossing", "First Touch", "Passing", "Decisions", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Tackling", "Technique", "Anticipation", "Composure", "Off The Ball", "Vision"]
+            }
+          }
+        },
+        "WP": {
+          "name": "Wide Playmaker",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Composure", "Decisions", "Teamwork", "Vision"],
+              "preferred_attributes": ["Dribbling", "Off The Ball", "Agility"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision"],
+              "preferred_attributes": ["Anticipation", "Flair", "Acceleration", "Agility"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

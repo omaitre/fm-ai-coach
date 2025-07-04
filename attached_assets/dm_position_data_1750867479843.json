@@ -1,0 +1,93 @@
+{
+  "positions": {
+    "DM": {
+      "name": "Defensive Midfielder",
+      "roles": {
+        "REG": {
+          "name": "Regista",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Composure", "Balance"],
+              "preferred_attributes": ["Dribbling", "Long Shots", "Anticipation", "Decisions", "Flair", "Off The Ball", "Teamwork", "Vision"]
+            }
+          }
+        },
+        "DLP": {
+          "name": "Deep Lying Playmaker",
+          "duties": {
+            "support": {
+              "key_attributes": ["Passing", "Technique", "First Touch", "Composure", "Decisions", "Teamwork", "Vision"],
+              "preferred_attributes": ["Anticipation", "Off The Ball", "Work Rate", "Balance"]
+            },
+            "defend": {
+              "key_attributes": ["Passing", "Technique", "First Touch", "Composure", "Decisions", "Teamwork", "Vision", "Work Rate"],
+              "preferred_attributes": ["Tackling", "Anticipation", "Positioning", "Balance"]
+            }
+          }
+        },
+        "SV": {
+          "name": "Segundo Volante",
+          "duties": {
+            "support": {
+              "key_attributes": ["Marking", "Passing", "Tackling", "Off The Ball", "Positioning", "Work Rate", "Pace", "Stamina"],
+              "preferred_attributes": ["Finishing", "First Touch", "Long Shots", "Anticipation", "Composure", "Concentration", "Decisions", "Acceleration", "Balance", "Strength"]
+            }
+          }
+        },
+        "HB": {
+          "name": "Half Back",
+          "duties": {
+            "defend": {
+              "key_attributes": ["Marking", "Tackling", "Anticipation", "Concentration", "Positioning", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Heading", "Passing", "Aggression", "Bravery", "Composure", "Decisions", "Jumping Reach", "Strength"]
+            }
+          }
+        },
+        "A": {
+          "name": "Anchor Man",
+          "duties": {
+            "defend": {
+              "key_attributes": ["Marking", "Tackling", "Anticipation", "Concentration", "Decisions", "Positioning"],
+              "preferred_attributes": ["Composure", "Teamwork", "Strength"]
+            }
+          }
+        },
+        "DM": {
+          "name": "Defensive Midfielder",
+          "duties": {
+            "support": {
+              "key_attributes": ["Tackling", "Anticipation", "Concentration", "Positioning", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["First Touch", "Marking", "Passing", "Aggression", "Composure", "Decisions", "Strength"]
+            },
+            "defend": {
+              "key_attributes": ["Tackling", "Anticipation", "Concentration", "Positioning", "Teamwork", "Work Rate", "Stamina"],
+              "preferred_attributes": ["Marking", "Passing", "Aggression", "Composure", "Decisions", "Strength"]
+            }
+          }
+        },
+        "BWM": {
+          "name": "Ball Winning Midfielder",
+          "duties": {
+            "support": {
+              "key_attributes": ["Tackling", "Aggression", "Anticipation", "Bravery", "Teamwork", "Work Rate"],
+              "preferred_attributes": ["Passing", "Marking", "Concentration", "Agility", "Pace", "Stamina", "Strength"]
+            },
+            "defend": {
+              "key_attributes": ["Tackling", "Aggression", "Anticipation", "Bravery", "Teamwork", "Work Rate"],
+              "preferred_attributes": ["Marking", "Concentration", "Positioning", "Agility", "Pace", "Stamina", "Strength"]
+            }
+          }
+        },
+        "RP": {
+          "name": "Roaming Playmaker",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Anticipation", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision", "Work Rate", "Acceleration", "Stamina"],
+              "preferred_attributes": ["Dribbling", "Long Shots", "Concentration", "Positioning", "Agility", "Balance", "Pace"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

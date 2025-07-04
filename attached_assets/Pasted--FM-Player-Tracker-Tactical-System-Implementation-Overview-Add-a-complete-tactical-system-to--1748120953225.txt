@@ -1,0 +1,351 @@
+# FM Player Tracker - Tactical System Implementation
+
+## Overview
+Add a complete tactical system to the existing FM Player Tracker that allows users to create tactics with Position+Role+Duty combinations and define key/preferable attributes for player suitability calculations.
+
+## CRITICAL: Maintain Existing Technical Approach
+- **Keep current tech stack**: Node.js, Express, SQLite, HTML/CSS/JS frontend
+- **Follow existing patterns**: Same file structure, API design, and database patterns as current implementation
+- **No new dependencies**: Use existing libraries only (express, multer, sqlite3)
+- **Consistent styling**: Match current UI design and color schemes
+
+## Database Schema Changes
+
+### New Tables to Add:
+```sql
+-- Store tactic definitions
+CREATE TABLE tactics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    formation TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Store position assignments within tactics
+CREATE TABLE tactic_positions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tactic_id INTEGER,
+    position_code TEXT NOT NULL,
+    role_name TEXT NOT NULL,
+    duty TEXT NOT NULL,
+    player_id INTEGER,
+    FOREIGN KEY (tactic_id) REFERENCES tactics(id),
+    FOREIGN KEY (player_id) REFERENCES players(id)
+);
+
+-- Global storage of attribute definitions for Position+Role+Duty combinations
+CREATE TABLE position_role_duty_attributes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    position_code TEXT NOT NULL,
+    role_name TEXT NOT NULL,
+    duty TEXT NOT NULL,
+    key_attributes TEXT NOT NULL,      -- JSON array of attribute names
+    preferable_attributes TEXT NOT NULL, -- JSON array of attribute names
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(position_code, role_name, duty)
+);
+```
+
+## Static Configuration Files
+
+### Create `tactical_config.js`:
+```javascript
+const FORMATIONS = {
+    '4-4-2': {
+        name: '4-4-2',
+        positions: ['GK', 'DR', 'DCR', 'DCL', 'DL', 'MR', 'MCR', 'MCL', 'ML', 'STC', 'STC']
+    },
+    '4-3-3': {
+        name: '4-3-3', 
+        positions: ['GK', 'DR', 'DCR', 'DCL', 'DL', 'MCR', 'MC', 'MCL', 'AML', 'STC', 'AMR']
+    },
+    '5-3-2': {
+        name: '5-3-2',
+        positions: ['GK', 'DR', 'DCR', 'DC', 'DCL', 'DL', 'MCR', 'MC', 'MCL', 'STC', 'STC']
+    }
+    // Add more formations as needed
+};
+
+const TACTICAL_DATA = {
+    'GK': {
+        'Goalkeeper': {
+            duties: ['Defend']
+        }
+    },
+    'DR': {
+        'Full Back': {
+            duties: ['Defend', 'Support', 'Attack']
+        },
+        'Wing Back': {
+            duties: ['Support', 'Attack']
+        }
+    },
+    'DCR': {
+        'Central Defender': {
+            duties: ['Defend', 'Support']
+        },
+        'Ball Playing Defender': {
+            duties: ['Defend', 'Support']
+        },
+        'No Nonsense Centre Back': {
+            duties: ['Defend']
+        }
+    },
+    'STC': {
+        'Advanced Forward': {
+            duties: ['Attack']
+        },
+        'Deep Lying Forward': {
+            duties: ['Attack', 'Support']
+        },
+        'Target Man': {
+            duties: ['Attack', 'Support']
+        }
+    }
+    // Add all other positions and roles
+};
+
+// Separate attribute lists for GK vs outfield
+const GOALKEEPER_ATTRIBUTES = {
+    technical: ['First Touch', 'Kicking', 'Passing', 'Throwing'],
+    mental: ['Aggression', 'Anticipation', 'Bravery', 'Composure', 'Concentration', 'Decisions', 'Determination', 'Leadership', 'Positioning', 'Teamwork', 'Vision', 'Work Rate'],
+    physical: ['Acceleration', 'Agility', 'Balance', 'Jumping Reach', 'Natural Fitness', 'Pace', 'Stamina', 'Strength'],
+    goalkeeping: ['Aerial Reach', 'Command of Area', 'Communication', 'Eccentricity', 'Handling', 'One on Ones', 'Reflexes', 'Rushing Out', 'Tendency to Punch']
+};
+
+const OUTFIELD_ATTRIBUTES = {
+    technical: ['Corners', 'Crossing', 'Dribbling', 'Finishing', 'First Touch', 'Free Kick Taking', 'Heading', 'Long Shots', 'Long Throws', 'Marking', 'Passing', 'Penalty Taking', 'Tackling', 'Technique'],
+    mental: ['Aggression', 'Anticipation', 'Bravery', 'Composure', 'Concentration', 'Decisions', 'Determination', 'Flair', 'Leadership', 'Off the Ball', 'Positioning', 'Teamwork', 'Vision', 'Work Rate'],
+    physical: ['Acceleration', 'Agility', 'Balance', 'Jumping Reach', 'Natural Fitness', 'Pace', 'Stamina', 'Strength']
+};
+
+module.exports = { FORMATIONS, TACTICAL_DATA, GOALKEEPER_ATTRIBUTES, OUTFIELD_ATTRIBUTES };
+```
+
+## Frontend Implementation
+
+### Main Navigation Update
+Add "Tactics" tab to existing navigation:
+```html
+<nav class="main-nav">
+    <a href="#upload">Upload</a>
+    <a href="#players">Players</a>
+    <a href="#tactics" class="nav-tactics">Tactics</a>
+</nav>
+```
+
+### Tactics Interface Requirements
+
+#### 1. Tactics List Page
+- Show all existing tactics in a table
+- Columns: Name, Formation, Created Date, Actions (View/Edit/Delete)
+- "Create New Tactic" button
+
+#### 2. Tactic Creator Flow
+**Step 1: Formation Selection**
+```html
+<div class="formation-selector">
+    <h2>Select Formation</h2>
+    <div class="formation-buttons">
+        <button class="formation-btn" data-formation="4-4-2">4-4-2</button>
+        <button class="formation-btn" data-formation="4-3-3">4-3-3</button>
+        <button class="formation-btn" data-formation="5-3-2">5-3-2</button>
+    </div>
+</div>
+```
+
+**Step 2: Position Configuration Table**
+```html
+<div class="tactic-positions">
+    <h2>Configure Positions</h2>
+    <table class="positions-table">
+        <thead>
+            <tr>
+                <th>Position</th>
+                <th>Role</th>
+                <th>Duty</th>
+                <th>Player</th>
+            </tr>
+        </thead>
+        <tbody id="positions-tbody">
+            <!-- Populated dynamically based on formation -->
+        </tbody>
+    </table>
+</div>
+```
+
+#### 3. Attribute Definition Modal (Interruption)
+**Triggered when new Position+Role+Duty combination is selected:**
+```html
+<div class="attribute-modal" id="attribute-modal">
+    <div class="modal-content">
+        <h3>New Combination: <span id="combination-title"></span></h3>
+        <p>Define key and preferable attributes for this combination:</p>
+        
+        <div class="attribute-section">
+            <h4>Key Attributes (Weight: 1.0)</h4>
+            <div class="attribute-categories" id="key-attributes">
+                <!-- Dynamically populated based on GK vs outfield -->
+            </div>
+        </div>
+        
+        <div class="attribute-section">
+            <h4>Preferable Attributes (Weight: 1.0)</h4>
+            <div class="attribute-categories" id="preferable-attributes">
+                <!-- Dynamically populated based on GK vs outfield -->
+            </div>
+        </div>
+        
+        <div class="validation-warnings" id="validation-warnings">
+            <!-- Show warnings for duplicate selections -->
+        </div>
+        
+        <div class="modal-actions">
+            <button id="save-attributes">Save & Continue</button>
+            <button id="cancel-tactic">Cancel Tactic Creation</button>
+        </div>
+    </div>
+</div>
+```
+
+## API Endpoints to Implement
+
+### New Routes in server.js:
+```javascript
+// Get all tactics
+app.get('/api/tactics', (req, res) => {
+    // Return all tactics with formation info
+});
+
+// Get specific tactic with positions and players
+app.get('/api/tactics/:id', (req, res) => {
+    // Return full tactic details including position assignments
+});
+
+// Create new tactic
+app.post('/api/tactics', (req, res) => {
+    // Create tactic and tactic_positions records
+    // Body: { name, formation, positions: [{position, role, duty, player_id}] }
+});
+
+// Get formations list
+app.get('/api/formations', (req, res) => {
+    // Return FORMATIONS object
+});
+
+// Get roles for position
+app.get('/api/roles/:position', (req, res) => {
+    // Return available roles for given position from TACTICAL_DATA
+});
+
+// Get duties for position+role
+app.get('/api/duties/:position/:role', (req, res) => {
+    // Return available duties for position+role combination
+});
+
+// Check if Position+Role+Duty combination has defined attributes
+app.get('/api/check-attributes/:position/:role/:duty', (req, res) => {
+    // Query position_role_duty_attributes table
+    // Return { exists: true/false, attributes: {...} }
+});
+
+// Save attribute definition for Position+Role+Duty
+app.post('/api/define-attributes', (req, res) => {
+    // Insert into position_role_duty_attributes table
+    // Body: { position, role, duty, key_attributes: [], preferable_attributes: [] }
+});
+
+// Get attribute lists (GK vs outfield)
+app.get('/api/attributes/:type', (req, res) => {
+    // Return GOALKEEPER_ATTRIBUTES or OUTFIELD_ATTRIBUTES based on type
+});
+
+// Calculate player suitability for position+role+duty
+app.get('/api/player-suitability/:player_id/:position/:role/:duty', (req, res) => {
+    // Calculate suitability score based on defined key/preferable attributes
+    // Return { score: number, breakdown: {...} }
+});
+```
+
+## JavaScript Frontend Logic
+
+### Key Functions to Implement:
+```javascript
+// Formation selection handler
+function selectFormation(formation) {
+    // Load formation positions and create position configuration rows
+}
+
+// Role/duty cascade dropdowns
+function handlePositionChange(positionElement) {
+    // Update role dropdown based on selected position
+}
+
+function handleRoleChange(roleElement) {
+    // Update duty dropdown based on selected position+role
+    // Check if combination needs attribute definition
+}
+
+// Attribute definition modal
+function showAttributeModal(position, role, duty) {
+    // Load appropriate attribute categories (GK vs outfield)
+    // Show modal for attribute selection
+}
+
+function saveAttributeDefinition() {
+    // Validate selections (no duplicates between key/preferable)
+    // Save to database via API
+    // Continue tactic creation flow
+}
+
+// Player suitability calculation
+function calculateSuitability(playerId, position, role, duty) {
+    // Call API to get suitability score
+    // Display in player dropdown or separate rating
+}
+```
+
+## Implementation Sequence
+
+### Phase 1: Core Structure
+1. Add database tables with migration script
+2. Create tactical_config.js with formation/role data
+3. Add basic tactics list page and navigation
+
+### Phase 2: Tactic Creation
+1. Formation selection interface
+2. Position configuration table with cascading dropdowns
+3. Basic save/load functionality (without attributes)
+
+### Phase 3: Attribute System
+1. Attribute definition modal
+2. Database storage of attribute definitions
+3. Validation and persistence logic
+
+### Phase 4: Player Integration
+1. Player assignment to positions
+2. Suitability calculation based on attributes
+3. Rating display in tactic view
+
+## Styling Requirements
+- **Consistent with existing design**: Use same colors, fonts, button styles
+- **Responsive tables**: Position configuration should work on mobile
+- **Modal styling**: Attribute modal should match existing modal patterns
+- **Form validation**: Clear error states and success feedback
+
+## Testing Checklist
+- [ ] Can create tactic with all positions filled
+- [ ] Attribute definition modal appears for new combinations
+- [ ] Attribute definition persists across tactics
+- [ ] Player suitability calculation works correctly
+- [ ] All API endpoints return proper JSON responses
+- [ ] Database constraints prevent duplicate attribute definitions
+- [ ] UI works on mobile devices
+
+## Critical Notes
+- **Use existing database connection patterns** from current player/snapshot implementation
+- **Follow existing error handling** patterns in API responses
+- **Maintain existing file structure** - add tactical files alongside existing ones
+- **No breaking changes** to existing player tracking functionality
+- **Use same JSON response formats** as existing API endpoints

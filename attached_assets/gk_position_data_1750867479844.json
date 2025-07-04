@@ -1,0 +1,35 @@
+{
+  "positions": {
+    "GK": {
+      "name": "Goalkeeper",
+      "roles": {
+        "GK": {
+          "name": "Goalkeeper",
+          "duties": {
+            "defend": {
+              "key_attributes": ["Aerial Reach", "Command of Area", "Communication", "Handling", "Kicking", "Reflexes", "Concentration", "Positioning", "Agility"],
+              "preferred_attributes": ["One on Ones", "Throwing", "Anticipation", "Decisions"]
+            }
+          }
+        },
+        "SK": {
+          "name": "Sweeper Keeper",
+          "duties": {
+            "defend": {
+              "key_attributes": ["Command of Area", "Kicking", "One on Ones", "Reflexes", "Anticipation", "Concentration", "Positioning", "Agility"],
+              "preferred_attributes": ["Aerial Reach", "Communication", "First Touch", "Handling", "Passing", "Rushing Out", "Throwing", "Composure", "Decisions", "Vision", "Acceleration"]
+            },
+            "support": {
+              "key_attributes": ["Command of Area", "Kicking", "One on Ones", "Reflexes", "Anticipation", "Concentration", "Positioning", "Agility", "Composure"],
+              "preferred_attributes": ["Aerial Reach", "Communication", "First Touch", "Handling", "Passing", "Rushing Out", "Throwing", "Decisions", "Vision", "Acceleration"]
+            },
+            "attack": {
+              "key_attributes": ["Command of Area", "Kicking", "One on Ones", "Reflexes", "Anticipation", "Concentration", "Positioning", "Agility", "Composure"],
+              "preferred_attributes": ["Aerial Reach", "Communication", "First Touch", "Handling", "Passing", "Rushing Out", "Throwing", "Decisions", "Vision", "Acceleration", "Eccentricity"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

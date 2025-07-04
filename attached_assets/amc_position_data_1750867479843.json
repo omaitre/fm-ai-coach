@@ -1,0 +1,62 @@
+{
+  "positions": {
+    "AMC": {
+      "name": "Attacking Midfielder (Centre)",
+      "roles": {
+        "AP": {
+          "name": "Advanced Playmaker",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision"],
+              "preferred_attributes": ["Dribbling", "Anticipation", "Flair", "Agility"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision"],
+              "preferred_attributes": ["Anticipation", "Flair", "Acceleration", "Agility"]
+            }
+          }
+        },
+        "AM": {
+          "name": "Attacking Midfielder",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Long Shots", "Passing", "Technique", "Anticipation", "Decisions", "Flair", "Off The Ball"],
+              "preferred_attributes": ["Dribbling", "Composure", "Vision", "Agility"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Long Shots", "Passing", "Technique", "Anticipation", "Decisions", "Flair", "Off The Ball"],
+              "preferred_attributes": ["Finishing", "Composure", "Vision", "Agility"]
+            }
+          }
+        },
+        "SS": {
+          "name": "Shadow Striker",
+          "duties": {
+            "attack": {
+              "key_attributes": ["Dribbling", "Finishing", "First Touch", "Anticipation", "Composure", "Off The Ball", "Acceleration"],
+              "preferred_attributes": ["Passing", "Technique", "Concentration", "Decisions", "Work Rate", "Agility", "Balance", "Pace", "Stamina"]
+            }
+          }
+        },
+        "E": {
+          "name": "Enganche",
+          "duties": {
+            "attack": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Composure", "Decisions", "Vision"],
+              "preferred_attributes": ["Anticipation", "Flair", "Off The Ball", "Balance"]
+            }
+          }
+        },
+        "T": {
+          "name": "Trequartista",
+          "duties": {
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Composure", "Decisions", "Flair", "Off The Ball", "Vision", "Acceleration"],
+              "preferred_attributes": ["Finishing", "Anticipation", "Agility", "Balance"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

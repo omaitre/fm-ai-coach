@@ -1,0 +1,42 @@
+Please read the project-status.md file first to understand the current state of the project.
+I need you to incorporate position, role, and duty data into the customer journeys to help users select and evaluate players more effectively.
+Requirements (Gherkin format):
+gherkinFeature: Position Role Integration in Player Management
+
+Scenario: User selects a position for role analysis
+  Given I have JSON files with position data (ST, AMR, AML, AMC, MC, DM, MR, ML, CD, DR, DL, GK)
+  When I navigate to player evaluation or role selection
+  Then I should see a dropdown with all available positions
+
+Scenario: User selects a role within a position
+  Given I have selected a position (e.g., "ST - Striker")
+  When I choose a role dropdown
+  Then I should see all available roles for that position (e.g., Poacher, False Nine, Target Man, etc.)
+
+Scenario: User selects a duty within a role
+  Given I have selected a position and role (e.g., "ST - Target Man")
+  When I choose a duty dropdown
+  Then I should see all available duties for that role (e.g., Support, Attack)
+
+Scenario: System shows key attributes for selected role/duty
+  Given I have selected position, role, and duty (e.g., "ST - Target Man - Support")
+  When the selection is complete
+  Then I should see the key attributes highlighted (Heading, Bravery, Balance, etc.)
+  And I should see preferred attributes listed separately
+
+Scenario: Player attribute evaluation against role requirements
+  Given I have a player's attributes loaded
+  And I have selected a target role/duty combination
+  When I view the player evaluation
+  Then key attributes should be prominently highlighted (green if good match, red if poor)
+  And preferred attributes should show secondary highlighting
+  And I should see a role suitability score/rating
+Technical approach questions for you:
+
+How should the JSON data be loaded - as static imports or dynamic loading?
+Should this integrate with the existing player tracking system or be a separate role analysis feature?
+Do you want the role data to influence the player progression tracking (e.g., highlight improvements in role-relevant attributes)?
+Should users be able to compare multiple roles simultaneously for the same player?
+
+Please analyze the current technical architecture and framework of the project, then explain how you would implement this position/role data integration. Focus on the user experience flow and data structure considerations.
+Before making any changes, please recap what you understood from this requirement and wait for me to instruct you to proceed with the implementation.

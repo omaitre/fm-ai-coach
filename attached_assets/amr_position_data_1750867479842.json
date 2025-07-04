@@ -1,0 +1,92 @@
+{
+  "positions": {
+    "AMR": {
+      "name": "Attacking Midfielder (Right)",
+      "roles": {
+        "IW": {
+          "name": "Inverted Winger",
+          "duties": {
+            "support": {
+              "key_attributes": ["Dribbling", "Passing", "Technique", "Off The Ball", "Acceleration"],
+              "preferred_attributes": ["Crossing", "First Touch", "Long Shots", "Composure", "Decisions", "Vision", "Work Rate", "Agility", "Pace", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "Passing", "Technique", "Off The Ball", "Acceleration", "Agility"],
+              "preferred_attributes": ["Crossing", "First Touch", "Long Shots", "Composure", "Decisions", "Vision", "Anticipation", "Flair", "Pace"]
+            }
+          }
+        },
+        "IF": {
+          "name": "Inside Forward",
+          "duties": {
+            "support": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Off The Ball", "Agility", "Balance"],
+              "preferred_attributes": ["Finishing", "Long Shots", "Anticipation", "Composure", "Flair", "Vision", "Acceleration", "Pace"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "Finishing", "First Touch", "Technique", "Off The Ball", "Agility", "Balance"],
+              "preferred_attributes": ["Long Shots", "Passing", "Anticipation", "Composure", "Flair", "Acceleration", "Pace"]
+            }
+          }
+        },
+        "W": {
+          "name": "Winger",
+          "duties": {
+            "support": {
+              "key_attributes": ["Crossing", "Dribbling", "Technique", "Off The Ball", "Acceleration", "Pace"],
+              "preferred_attributes": ["First Touch", "Passing", "Work Rate", "Agility", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Crossing", "Dribbling", "Technique", "Off The Ball", "Acceleration", "Pace"],
+              "preferred_attributes": ["First Touch", "Passing", "Agility", "Anticipation", "Flair"]
+            }
+          }
+        },
+        "AP": {
+          "name": "Advanced Playmaker",
+          "duties": {
+            "support": {
+              "key_attributes": ["First Touch", "Passing", "Technique", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision"],
+              "preferred_attributes": ["Dribbling", "Anticipation", "Flair", "Agility"]
+            },
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Composure", "Decisions", "Off The Ball", "Teamwork", "Vision"],
+              "preferred_attributes": ["Anticipation", "Flair", "Acceleration", "Agility"]
+            }
+          }
+        },
+        "WTM": {
+          "name": "Wide Target Man",
+          "duties": {
+            "support": {
+              "key_attributes": ["Bravery", "Teamwork", "Jumping Reach", "Strength"],
+              "preferred_attributes": ["Crossing", "First Touch", "Heading", "Anticipation", "Off The Ball", "Work Rate", "Balance", "Stamina"]
+            },
+            "attack": {
+              "key_attributes": ["Bravery", "Off The Ball", "Jumping Reach", "Strength"],
+              "preferred_attributes": ["Crossing", "First Touch", "Heading", "Finishing", "Anticipation", "Teamwork", "Work Rate", "Balance", "Stamina"]
+            }
+          }
+        },
+        "T": {
+          "name": "Trequartista",
+          "duties": {
+            "attack": {
+              "key_attributes": ["Dribbling", "First Touch", "Passing", "Technique", "Composure", "Decisions", "Flair", "Off The Ball", "Vision", "Acceleration"],
+              "preferred_attributes": ["Finishing", "Anticipation", "Agility", "Balance"]
+            }
+          }
+        },
+        "R": {
+          "name": "Raumdeuter",
+          "duties": {
+            "attack": {
+              "key_attributes": ["Finishing", "Anticipation", "Composure", "Decisions", "Concentration", "Off The Ball", "Balance"],
+              "preferred_attributes": ["First Touch", "Technique", "Work Rate", "Acceleration", "Stamina"]
+            }
+          }
+        }
+      }
+    }
+  }
+}
