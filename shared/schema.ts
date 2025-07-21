@@ -5,7 +5,7 @@ import { z } from "zod";
 
 
 // Players table
-export const players = pgTable("players", {
+export const players = sqliteTable("players"
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   age: integer("age"),
@@ -15,7 +15,7 @@ export const players = pgTable("players", {
 });
 
 // Player snapshots (attribute data at specific points in time)
-export const snapshots = pgTable("snapshots", {
+export const snapshots = sqliteTable("snapshots", {
   id: serial("id").primaryKey(),
   playerId: integer("player_id").notNull().references(() => players.id, { onDelete: "cascade" }),
   currentAbility: integer("current_ability"),
@@ -25,7 +25,7 @@ export const snapshots = pgTable("snapshots", {
 });
 
 // Individual attributes for each snapshot
-export const attributes = pgTable("attributes", {
+export const attributes = sqliteTable("attributes", {
   id: serial("id").primaryKey(),
   snapshotId: integer("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
   attributeName: text("attribute_name").notNull(),
@@ -34,7 +34,7 @@ export const attributes = pgTable("attributes", {
 });
 
 // Tactical formations
-export const tactics = pgTable("tactics", {
+export const tactics = sqliteTable("tactics", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   formation: text("formation"),
@@ -43,7 +43,7 @@ export const tactics = pgTable("tactics", {
 });
 
 // Positions within tactics
-export const positions = pgTable("positions", {
+export const positions = sqliteTable("positions", {
   id: serial("id").primaryKey(),
   tacticId: integer("tactic_id").notNull().references(() => tactics.id, { onDelete: "cascade" }),
   positionName: text("position_name").notNull(),
@@ -55,7 +55,7 @@ export const positions = pgTable("positions", {
 });
 
 // Key attributes for each position
-export const positionAttributes = pgTable("position_attributes", {
+export const positionAttributes = sqliteTable("position_attributes", {
   id: serial("id").primaryKey(),
   positionId: integer("position_id").notNull().references(() => positions.id, { onDelete: "cascade" }),
   attributeName: text("attribute_name").notNull(),
@@ -63,7 +63,7 @@ export const positionAttributes = pgTable("position_attributes", {
 });
 
 // Global storage of attribute definitions for Position+Role+Duty combinations
-export const positionRoleDutyAttributes = pgTable("position_role_duty_attributes", {
+export const positionRoleDutyAttributes = sqliteTable("position_role_duty_attributes", {
   id: serial("id").primaryKey(),
   positionCode: text("position_code").notNull(),
   roleName: text("role_name").notNull(),
@@ -74,7 +74,7 @@ export const positionRoleDutyAttributes = pgTable("position_role_duty_attributes
 });
 
 // Cached position suitability scores
-export const playerPositionScores = pgTable("player_position_scores", {
+export const playerPositionScores = sqliteTable("player_position_scores", {
   id: serial("id").primaryKey(),
   playerId: integer("player_id").notNull().references(() => players.id, { onDelete: "cascade" }),
   positionId: integer("position_id").notNull().references(() => positions.id, { onDelete: "cascade" }),
