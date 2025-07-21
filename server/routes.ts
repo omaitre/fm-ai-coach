@@ -786,10 +786,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           // Create player
           const newPlayer = await storage.createPlayer({
-            name: playerName,
-            age: playerAge,
-            positions: JSON.stringify(playerPositions), // Convert array to JSON string
-          });
+            name: playerData.name,
+            age: playerData.age,
+            positions: playerData.positions, // Already converted in storage.ts
+          });       
         
           // Create snapshot
           const snapshot = await storage.createSnapshot({

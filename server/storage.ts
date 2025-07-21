@@ -135,7 +135,6 @@ export class DatabaseStorage implements IStorage {
 
     return created;
   }
-
     
     // Special debugging for Mylo Hall
     if (player.name === 'Mylo Hall') {
