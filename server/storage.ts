@@ -24,7 +24,7 @@ import {
   type PlayerPositionScore
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, asc, and, or, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Player operations
@@ -544,25 +544,92 @@ export class DatabaseStorage implements IStorage {
 
   // Complex queries
   async getPlayersWithLatestSnapshots(): Promise<Array<Player & { latestSnapshot?: Snapshot; attributes?: Attribute[] }>> {
-    const allPlayers = await this.getAllPlayers();
-    const result = [];
+    // Single optimized query instead of N+1 queries
+    const playersWithData = await db
+      .select({
+        // Player data
+        playerId: players.id,
+        playerName: players.name,
+        playerAge: players.age,
+        playerPositions: players.positions,
+        playerCreatedAt: players.createdAt,
+        playerUpdatedAt: players.updatedAt,
 
-    for (const player of allPlayers) {
-      const latestSnapshot = await this.getLatestSnapshotByPlayer(player.id);
-      let attributes: Attribute[] = [];
-      
-      if (latestSnapshot) {
-        attributes = await this.getAttributesBySnapshot(latestSnapshot.id);
+        // Latest snapshot data
+        snapshotId: snapshots.id,
+        snapshotCurrentAbility: snapshots.currentAbility,
+        snapshotPotentialAbility: snapshots.potentialAbility,
+        snapshotDate: snapshots.snapshotDate,
+        snapshotCreatedAt: snapshots.createdAt,
+
+        // Attribute data
+        attributeId: attributes.id,
+        attributeName: attributes.attributeName,
+        attributeValue: attributes.attributeValue,
+        attributeCategory: attributes.attributeCategory,
+      })
+      .from(players)
+      .leftJoin(
+        // Subquery to get only the latest snapshot per player
+        db.select({
+          id: snapshots.id,
+          playerId: snapshots.playerId,
+          currentAbility: snapshots.currentAbility,
+          potentialAbility: snapshots.potentialAbility,
+          snapshotDate: snapshots.snapshotDate,
+          createdAt: snapshots.createdAt,
+          rn: sql`row_number() over (partition by player_id order by snapshot_date desc)`.as('rn')
+        })
+        .from(snapshots)
+        .as('latest_snapshots'),
+        and(
+          eq(sql`latest_snapshots.player_id`, players.id),
+          eq(sql`latest_snapshots.rn`, 1)
+        )
+      )
+      .leftJoin(snapshots, eq(snapshots.id, sql`latest_snapshots.id`))
+      .leftJoin(attributes, eq(attributes.snapshotId, snapshots.id))
+      .orderBy(players.name, attributes.attributeName);
+
+    // Group the results to avoid duplicate players
+    const playerMap = new Map();
+
+    for (const row of playersWithData) {
+      const playerId = row.playerId;
+
+      if (!playerMap.has(playerId)) {
+        playerMap.set(playerId, {
+          id: row.playerId,
+          name: row.playerName,
+          age: row.playerAge,
+          positions: row.playerPositions,
+          createdAt: row.playerCreatedAt,
+          updatedAt: row.playerUpdatedAt,
+          latestSnapshot: row.snapshotId ? {
+            id: row.snapshotId,
+            playerId: row.playerId,
+            currentAbility: row.snapshotCurrentAbility,
+            potentialAbility: row.snapshotPotentialAbility,
+            snapshotDate: row.snapshotDate,
+            createdAt: row.snapshotCreatedAt,
+          } : undefined,
+          attributes: []
+        });
       }
 
-      result.push({
-        ...player,
-        latestSnapshot,
-        attributes,
-      });
+      // Add attribute if it exists
+      if (row.attributeId) {
+        playerMap.get(playerId).attributes.push({
+          id: row.attributeId,
+          snapshotId: row.snapshotId,
+          attributeName: row.attributeName,
+          attributeValue: row.attributeValue,
+          attributeCategory: row.attributeCategory,
+        });
+      }
     }
 
-    return result;
+    return Array.from(playerMap.values());
   }
 
   async getPlayerRankingsForPosition(positionId: number): Promise<Array<Player & { snapshot: Snapshot; score: number; attributes: Attribute[] }>> {
