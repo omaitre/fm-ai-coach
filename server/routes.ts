@@ -788,12 +788,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const newPlayer = await storage.createPlayer({
             name: playerData.name,
             age: playerData.age,
-            positions: playerData.positions, // Already converted in storage.ts
-          });       
+            positions: playerData.positions,
+          });
         
           // Create snapshot
           const snapshot = await storage.createSnapshot({
-            playerId: player.id,
+            playerId: newPlayer.id,
             currentAbility: playerData.currentAbility || null,
             potentialAbility: playerData.potentialAbility || null,
             screenshotPath: null, // No screenshot for HTML imports
@@ -819,7 +819,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             for (const position of positions) {
               const score = await calculatePositionScore(snapshot.id, position.id);
               await storage.createPlayerPositionScore({
-                playerId: player.id,
+                playerId: newPlayer.id,
                 positionId: position.id,
                 snapshotId: snapshot.id,
                 score,
