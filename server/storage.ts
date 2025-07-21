@@ -135,27 +135,6 @@ export class DatabaseStorage implements IStorage {
 
     return created;
   }
-    
-    // Special debugging for Mylo Hall
-    if (player.name === 'Mylo Hall') {
-      console.log('=== MYLO HALL DATABASE DEBUG ===');
-      console.log('Input positions:', player.positions);
-      console.log('Input positions type:', typeof player.positions);
-      console.log('Input positions length:', Array.isArray(player.positions) ? player.positions.length : 'not array');
-    }
-    
-    const [created] = await db.insert(players).values(player).returning();
-    console.log("Player created in database:", JSON.stringify(created, null, 2));
-    
-    if (player.name === 'Mylo Hall') {
-      console.log('=== MYLO HALL DATABASE RESULT ===');
-      console.log('Database positions:', created.positions);
-      console.log('Database positions type:', typeof created.positions);
-      console.log('===================================');
-    }
-    
-    return created;
-  }
 
   async updatePlayer(id: number, player: Partial<InsertPlayer>): Promise<Player | undefined> {
     const [updated] = await db
