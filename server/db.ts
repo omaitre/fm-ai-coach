@@ -1,15 +1,28 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
 import * as schema from "@shared/schema";
+import path from 'path';
+import fs from 'fs';
 
-neonConfig.webSocketConstructor = ws;
-
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
+// Create data directory if it doesn't exist
+const dataDir = path.join(process.cwd(), 'data');
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+// SQLite database file path
+const dbPath = path.join(dataDir, 'fm-tracker.db');
+
+// Create SQLite connection
+const sqlite = new Database(dbPath);
+
+// Enable foreign keys
+sqlite.pragma('foreign_keys = ON');
+
+// Create drizzle instance
+export const db = drizzle(sqlite, { schema });
+
+// Export sqlite instance for raw queries if needed
+export const sqliteDb = sqlite;
+
+console.log(`Database connected at: ${dbPath}`);
