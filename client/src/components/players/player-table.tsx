@@ -143,9 +143,24 @@ export const PlayerTable: React.FC<PlayerTableProps> = ({ players, selectedPosit
     return Math.round(sum / categoryAttributes.length);
   };
 
-  const formatPositions = (positions: string[] | undefined) => {
-    if (!positions || positions.length === 0) return '-';
-    return positions.slice(0, 3).join(', ') + (positions.length > 3 ? '...' : '');
+  const formatPositions = (positions: string[] | string | undefined) => {
+    if (!positions) return '-';
+
+    // Handle JSON string from SQLite
+    let positionsArray: string[];
+    if (typeof positions === 'string') {
+      try {
+        positionsArray = JSON.parse(positions);
+      } catch {
+        // If it's not valid JSON, treat as single position
+        positionsArray = [positions];
+      }
+    } else {
+      positionsArray = positions;
+    }
+
+    if (positionsArray.length === 0) return '-';
+    return positionsArray.slice(0, 3).join(', ') + (positionsArray.length > 3 ? '...' : '');
   };
 
   // Get all unique attributes for each category from the first player (as template)
