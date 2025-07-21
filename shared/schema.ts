@@ -3,30 +3,29 @@ import { relations, sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-
 // Players table
-export const players = sqliteTable("players"
-  id: serial("id").primaryKey(),
+export const players = sqliteTable("players", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   age: integer("age"),
-  positions: text("positions").array(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  positions: text("positions"), // SQLite stores as JSON text string
+  createdAt: text("created_at").default(sql`(datetime('now'))`),
+  updatedAt: text("updated_at").default(sql`(datetime('now'))`),
 });
 
 // Player snapshots (attribute data at specific points in time)
 export const snapshots = sqliteTable("snapshots", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   playerId: integer("player_id").notNull().references(() => players.id, { onDelete: "cascade" }),
   currentAbility: integer("current_ability"),
   potentialAbility: integer("potential_ability"),
-  snapshotDate: timestamp("snapshot_date").defaultNow(),
-  createdAt: timestamp("created_at").defaultNow(),
+  snapshotDate: text("snapshot_date").default(sql`(datetime('now'))`),
+  createdAt: text("created_at").default(sql`(datetime('now'))`),
 });
 
 // Individual attributes for each snapshot
 export const attributes = sqliteTable("attributes", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   snapshotId: integer("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
   attributeName: text("attribute_name").notNull(),
   attributeValue: integer("attribute_value").notNull(),
@@ -35,16 +34,16 @@ export const attributes = sqliteTable("attributes", {
 
 // Tactical formations
 export const tactics = sqliteTable("tactics", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   formation: text("formation"),
-  isActive: boolean("is_active").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+  isActive: integer("is_active").default(0), // SQLite uses 0/1 for boolean
+  createdAt: text("created_at").default(sql`(datetime('now'))`),
 });
 
 // Positions within tactics
 export const positions = sqliteTable("positions", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   tacticId: integer("tactic_id").notNull().references(() => tactics.id, { onDelete: "cascade" }),
   positionName: text("position_name").notNull(),
   positionCode: text("position_code").notNull(),
@@ -56,7 +55,7 @@ export const positions = sqliteTable("positions", {
 
 // Key attributes for each position
 export const positionAttributes = sqliteTable("position_attributes", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   positionId: integer("position_id").notNull().references(() => positions.id, { onDelete: "cascade" }),
   attributeName: text("attribute_name").notNull(),
   weight: real("weight").default(1.0),
@@ -64,18 +63,18 @@ export const positionAttributes = sqliteTable("position_attributes", {
 
 // Global storage of attribute definitions for Position+Role+Duty combinations
 export const positionRoleDutyAttributes = sqliteTable("position_role_duty_attributes", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   positionCode: text("position_code").notNull(),
   roleName: text("role_name").notNull(),
   duty: text("duty").notNull(),
   keyAttributes: text("key_attributes").notNull(), // JSON array of attribute names
   preferableAttributes: text("preferable_attributes").notNull(), // JSON array of attribute names
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: text("created_at").default(sql`(datetime('now'))`),
 });
 
 // Cached position suitability scores
 export const playerPositionScores = sqliteTable("player_position_scores", {
-  id: serial("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }),
   playerId: integer("player_id").notNull().references(() => players.id, { onDelete: "cascade" }),
   positionId: integer("position_id").notNull().references(() => positions.id, { onDelete: "cascade" }),
   snapshotId: integer("snapshot_id").notNull().references(() => snapshots.id, { onDelete: "cascade" }),
@@ -84,8 +83,8 @@ export const playerPositionScores = sqliteTable("player_position_scores", {
   keyAttributeScore: integer("key_attribute_score").notNull(),
   preferredAttributeScore: integer("preferred_attribute_score").notNull(),
   otherAttributeScore: integer("other_attribute_score").notNull(),
-  fitnessPercentage: decimal("fitness_percentage", { precision: 5, scale: 2 }).notNull(),
-  calculatedAt: timestamp("calculated_at").defaultNow(),
+  fitnessPercentage: text("fitness_percentage").notNull(),
+  calculatedAt: text("calculated_at").default(sql`(datetime('now'))`),
 });
 
 // Define relations
