@@ -785,12 +785,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (const playerData of parsedPlayers) {
         try {
           // Create player
-          const player = await storage.createPlayer({
-            name: playerData.name,
-            age: playerData.age || null,
-            positions: playerData.positions,
+          const newPlayer = await storage.createPlayer({
+            name: playerName,
+            age: playerAge,
+            positions: JSON.stringify(playerPositions), // Convert array to JSON string
           });
-
+        
           // Create snapshot
           const snapshot = await storage.createSnapshot({
             playerId: player.id,

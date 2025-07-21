@@ -121,6 +121,21 @@ export class DatabaseStorage implements IStorage {
 
   async createPlayer(player: InsertPlayer): Promise<Player> {
     console.log("Creating player with data:", JSON.stringify(player, null, 2));
+
+    // Convert positions array to JSON string if it's an array
+    const playerData = {
+      ...player,
+      positions: Array.isArray(player.positions)
+        ? JSON.stringify(player.positions)
+        : player.positions
+    };
+
+    const [created] = await db.insert(players).values(playerData).returning();
+    console.log("Player created in database:", JSON.stringify(created, null, 2));
+
+    return created;
+  }
+
     
     // Special debugging for Mylo Hall
     if (player.name === 'Mylo Hall') {
