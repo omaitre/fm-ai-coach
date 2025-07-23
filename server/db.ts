@@ -1,28 +1,20 @@
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import Database from 'better-sqlite3';
-import * as schema from "@shared/schema";
-import path from 'path';
-import fs from 'fs';
+import { Pool, neonConfig } from '@neondatabase/serverless';
+  import { drizzle } from 'drizzle-orm/neon-serverless';
+  import ws from "ws";
+  import * as schema from "@shared/schema";
 
-// Create data directory if it doesn't exist
-const dataDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+  neonConfig.webSocketConstructor = ws;
 
-// SQLite database file path
-const dbPath = path.join(dataDir, 'fm-tracker.db');
+  // For local development, use a simple DATABASE_URL
+  const DATABASE_URL = process.env.DATABASE_URL || "postgresql://user:password@localhost:5432/fm_tracker";
 
-// Create SQLite connection
-const sqlite = new Database(dbPath);
+  if (!DATABASE_URL) {
+    throw new Error(
+      "DATABASE_URL must be set. Did you forget to provision a database?",
+    );
+  }
 
-// Enable foreign keys
-sqlite.pragma('foreign_keys = ON');
+  export const pool = new Pool({ connectionString: DATABASE_URL });
+  export const db = drizzle({ client: pool, schema });
 
-// Create drizzle instance
-export const db = drizzle(sqlite, { schema });
-
-// Export sqlite instance for raw queries if needed
-export const sqliteDb = sqlite;
-
-console.log(`Database connected at: ${dbPath}`);
+  console.log(`Database connected to: ${DATABASE_URL}`);

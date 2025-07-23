@@ -120,8 +120,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createPlayer(player: InsertPlayer): Promise<Player> {
-    console.log("Creating player with data:", JSON.stringify(player, null, 2));
-
+    const [created] = await db.insert(players).values(player).returning();
+    return created;
+  }
     // Convert positions array to JSON string if it's an array
     const playerData = {
       ...player,
