@@ -66,7 +66,7 @@ Transform the tedious manual process of evaluating which players fit which tacti
    ```
 
 4. **Open your browser**
-   Navigate to `http://localhost:5000`
+   Navigate to `http://localhost:5173` (frontend) - API runs on `localhost:3001`
 
 ## 📋 Usage Workflow
 

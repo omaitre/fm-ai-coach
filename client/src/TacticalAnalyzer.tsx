@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from 'react-resizable-panels';
 import { Button } from './components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
-import { Badge } from './components/ui/badge';
-import { Progress } from './components/ui/progress';
 import { Upload, Download, Play, Settings, Users } from 'lucide-react';
-import { TacticalGrid } from './components/TacticalGrid';
-import { PositionDetails } from './components/PositionDetails';
 import { ImportModal } from './components/ImportModal';
 import { FormationSelector } from './components/FormationSelector';
-import { RecruitmentTargets } from './components/RecruitmentTargets';
+import { TacticalPitch } from './components/TacticalPitch';
+import { PositionDetailsPanel } from './components/PositionDetailsPanel';
 
 interface TacticAnalysis {
   tactic: {
@@ -200,68 +195,49 @@ export function TacticalAnalyzer() {
             </div>
           </div>
         ) : analysis ? (
-          <ResizablePanelGroup direction="horizontal" className="h-full">
+          <div className="h-full flex">
             {/* Left Panel - Tactical Formation */}
-            <ResizablePanel defaultSize={60} minSize={40}>
-              <div className="h-full p-6">
-                <Card className="h-full">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center gap-2">
-                        <Play className="w-5 h-5" />
-                        {analysis.tactic.name} ({analysis.tactic.formation})
-                      </CardTitle>
-                      
-                      {/* Coverage Overview */}
-                      <div className="flex gap-2">
-                        {['excellent', 'good', 'adequate', 'poor', 'critical'].map(level => {
-                          const count = analysis.analysis.filter(a => a.coverageLevel === level).length;
-                          if (count === 0) return null;
-                          return (
-                            <Badge key={level} className={`${getCoverageColor(level)} text-white`}>
-                              {count} {level}
-                            </Badge>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </CardHeader>
+            <div className="flex-1 p-6">
+              <div className="bg-white rounded-lg shadow-sm h-full p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-semibold flex items-center gap-2">
+                    <Play className="w-5 h-5" />
+                    {analysis.tactic.name} ({analysis.tactic.formation})
+                  </h2>
                   
-                  <CardContent className="flex-1">
-                    <TacticalGrid
-                      tactic={analysis.tactic}
-                      analysis={analysis.analysis}
-                      selectedPosition={selectedPosition}
-                      onPositionSelect={setSelectedPosition}
-                    />
-                  </CardContent>
-                </Card>
+                  {/* Coverage Overview */}
+                  <div className="flex gap-2">
+                    {['excellent', 'good', 'adequate', 'poor', 'critical'].map(level => {
+                      const count = analysis.analysis.filter(a => a.coverageLevel === level).length;
+                      if (count === 0) return null;
+                      return (
+                        <div key={level} className={`${getCoverageColor(level)} text-white px-2 py-1 rounded text-xs font-medium`}>
+                          {count} {level}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {/* Interactive Tactical Pitch */}
+                <TacticalPitch
+                  positions={analysis.tactic.positions}
+                  analysis={analysis.analysis}
+                  selectedPosition={selectedPosition}
+                  onPositionSelect={setSelectedPosition}
+                  formation={analysis.tactic.formation}
+                />
               </div>
-            </ResizablePanel>
-
-            <ResizableHandle withHandle />
+            </div>
 
             {/* Right Panel - Position Details */}
-            <ResizablePanel defaultSize={40} minSize={30}>
-              <div className="h-full p-6">
-                {selectedPosition ? (
-                  <PositionDetails 
-                    analysis={getSelectedPositionAnalysis()} 
-                    positionCode={selectedPosition}
-                  />
-                ) : (
-                  <Card className="h-full">
-                    <CardContent className="flex items-center justify-center h-full">
-                      <div className="text-center text-gray-500">
-                        <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                        <p>Select a position to view player analysis</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
+            <div className="w-1/3 p-6">
+              <PositionDetailsPanel 
+                selectedPosition={selectedPosition}
+                positionAnalysis={getSelectedPositionAnalysis()}
+              />
+            </div>
+          </div>
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-center max-w-md">
@@ -285,15 +261,16 @@ export function TacticalAnalyzer() {
         )}
       </div>
 
-      {/* Modals */}
+      {/* Import Modal */}
       <ImportModal 
         open={showImportModal} 
         onClose={() => setShowImportModal(false)}
         onSuccess={handleImportComplete}
       />
       
-      <FormationSelector
-        open={showFormationSelector}
+      {/* Formation Selector */}
+      <FormationSelector 
+        open={showFormationSelector} 
         onClose={() => setShowFormationSelector(false)}
         onSuccess={handleFormationSelected}
       />

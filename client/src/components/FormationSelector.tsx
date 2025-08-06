@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
 import { Settings, Play, Users } from 'lucide-react';
 
 interface FormationTemplate {
@@ -98,43 +94,45 @@ export function FormationSelector({ open, onClose, onSuccess }: FormationSelecto
     onClose();
   }, [onClose]);
 
-  return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Select Formation
-          </DialogTitle>
-        </DialogHeader>
+  if (!open) return null;
 
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Settings className="w-5 h-5" />
+            <h2 className="text-xl font-semibold">Select Formation</h2>
           </div>
-        ) : (
-          <div className="space-y-6">
-            {/* Formation Selection */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {templates.map((template) => (
-                <Card 
-                  key={template.name}
-                  className={`cursor-pointer transition-all ${
-                    selectedTemplate?.name === template.name 
-                      ? 'ring-2 ring-blue-500 bg-blue-50' 
-                      : 'hover:shadow-md'
-                  }`}
-                  onClick={() => setSelectedTemplate(template)}
-                >
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      <span>{template.formation}</span>
-                      <Badge variant="secondary">{template.positions.length}</Badge>
-                    </CardTitle>
-                    <p className="text-sm text-gray-600">{template.name}</p>
-                  </CardHeader>
-                  
-                  <CardContent>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Formation Selection */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {templates.map((template) => (
+                  <div 
+                    key={template.name}
+                    className={`
+                      border rounded-lg p-4 cursor-pointer transition-all
+                      ${selectedTemplate?.name === template.name 
+                        ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-200' 
+                        : 'hover:shadow-md border-gray-200'
+                      }
+                    `}
+                    onClick={() => setSelectedTemplate(template)}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold">{template.formation}</h3>
+                      <div className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
+                        {template.positions.length} positions
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-3">{template.name}</p>
+                    
                     <div className="space-y-2 text-sm">
                       {(() => {
                         const lines = getPositionsByLine(template.positions);
@@ -142,12 +140,12 @@ export function FormationSelector({ open, onClose, onSuccess }: FormationSelecto
                           <>
                             {lines.attack.length > 0 && (
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-500 min-w-16">Attack:</span>
+                                <span className="text-gray-500 min-w-16 text-xs">Attack:</span>
                                 <div className="flex flex-wrap gap-1">
                                   {lines.attack.map((pos, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
+                                    <span key={i} className="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs">
                                       {pos.positionCode}
-                                    </Badge>
+                                    </span>
                                   ))}
                                 </div>
                               </div>
@@ -155,12 +153,12 @@ export function FormationSelector({ open, onClose, onSuccess }: FormationSelecto
                             
                             {lines.midfield.length > 0 && (
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-500 min-w-16">Midfield:</span>
+                                <span className="text-gray-500 min-w-16 text-xs">Midfield:</span>
                                 <div className="flex flex-wrap gap-1">
                                   {lines.midfield.map((pos, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
+                                    <span key={i} className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">
                                       {pos.positionCode}
-                                    </Badge>
+                                    </span>
                                   ))}
                                 </div>
                               </div>
@@ -168,12 +166,12 @@ export function FormationSelector({ open, onClose, onSuccess }: FormationSelecto
                             
                             {lines.defense.length > 0 && (
                               <div className="flex items-center gap-2">
-                                <span className="text-gray-500 min-w-16">Defense:</span>
+                                <span className="text-gray-500 min-w-16 text-xs">Defense:</span>
                                 <div className="flex flex-wrap gap-1">
                                   {lines.defense.map((pos, i) => (
-                                    <Badge key={i} variant="outline" className="text-xs">
+                                    <span key={i} className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">
                                       {pos.positionCode}
-                                    </Badge>
+                                    </span>
                                   ))}
                                 </div>
                               </div>
@@ -182,75 +180,74 @@ export function FormationSelector({ open, onClose, onSuccess }: FormationSelecto
                         );
                       })()}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
 
-            {/* Selected Formation Details */}
-            {selectedTemplate && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+              {/* Selected Formation Details */}
+              {selectedTemplate && (
+                <div className="border rounded-lg p-6 bg-gray-50">
+                  <div className="flex items-center gap-2 mb-4">
                     <Play className="w-5 h-5" />
-                    {selectedTemplate.name} Details
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  {/* Position List */}
-                  <div>
-                    <h4 className="font-medium mb-3 flex items-center gap-2">
-                      <Users className="w-4 h-4" />
-                      Position Assignments ({selectedTemplate.positions.length})
-                    </h4>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {selectedTemplate.positions.map((position, index) => (
-                        <div key={index} className="bg-gray-50 rounded-lg p-3">
-                          <div className="font-medium text-sm">{position.positionCode}</div>
-                          <div className="text-xs text-gray-600">{position.role}</div>
-                          <div className="text-xs text-gray-500 capitalize">({position.duty})</div>
-                        </div>
-                      ))}
+                    <h3 className="text-lg font-semibold">{selectedTemplate.name} Details</h3>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {/* Position List */}
+                    <div>
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Users className="w-4 h-4" />
+                        Position Assignments ({selectedTemplate.positions.length})
+                      </h4>
+                      
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {selectedTemplate.positions.map((position, index) => (
+                          <div key={index} className="bg-white rounded-lg p-3 border">
+                            <div className="font-medium text-sm">{position.positionCode}</div>
+                            <div className="text-xs text-gray-600">{position.role}</div>
+                            <div className="text-xs text-gray-500 capitalize">({position.duty})</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Custom Name Input */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Tactic Name (Optional)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={selectedTemplate.name}
+                        value={customTacticName}
+                        onChange={(e) => setCustomTacticName(e.target.value)}
+                        className="w-full max-w-md px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Leave empty to use the default name
+                      </p>
                     </div>
                   </div>
+                </div>
+              )}
 
-                  {/* Custom Name Input */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Tactic Name (Optional)
-                    </label>
-                    <Input
-                      placeholder={selectedTemplate.name}
-                      value={customTacticName}
-                      onChange={(e) => setCustomTacticName(e.target.value)}
-                      className="max-w-md"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Leave empty to use the default name
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Actions */}
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={handleClose} disabled={isCreating}>
-                Cancel
-              </Button>
-              
-              <Button 
-                onClick={handleCreateTactic} 
-                disabled={!selectedTemplate || isCreating}
-              >
-                {isCreating ? 'Creating...' : 'Create Tactic'}
-              </Button>
+              {/* Actions */}
+              <div className="flex justify-end gap-3">
+                <Button variant="outline" onClick={handleClose} disabled={isCreating}>
+                  Cancel
+                </Button>
+                
+                <Button 
+                  onClick={handleCreateTactic} 
+                  disabled={!selectedTemplate || isCreating}
+                >
+                  {isCreating ? 'Creating...' : 'Create Tactic'}
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
