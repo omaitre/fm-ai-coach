@@ -130,59 +130,47 @@ export class PlayerService {
   }
 
   public async getPlayersWithLatestSnapshot(): Promise<PlayerWithSnapshot[]> {
-    // Get all players with their most recent snapshot and attributes
-    const query = `
-      SELECT 
-        p.id,
-        p.name,
-        p.age,
-        s.id as snapshot_id,
-        s.current_ability,
-        s.potential_ability,
-        s.import_date,
-        GROUP_CONCAT(a.name || ':' || a.value) as attributes_data
-      FROM players p
-      JOIN snapshots s ON p.id = s.player_id
-      JOIN attributes a ON s.id = a.snapshot_id
-      WHERE s.id IN (
-        SELECT s2.id 
-        FROM snapshots s2 
-        WHERE s2.player_id = p.id 
-        ORDER BY s2.import_date DESC 
-        LIMIT 1
-      )
-      GROUP BY p.id, p.name, p.age, s.id, s.current_ability, s.potential_ability, s.import_date
-      ORDER BY p.name
-    `;
-
-    const results = db.prepare(query).all() as any[];
+    // Get all players with their most recent snapshot
+    const allPlayers = await db.select().from(players);
     
-    return results.map(row => {
-      // Parse attributes from concatenated string
-      const attributesData = row.attributes_data || '';
-      const attributes: Record<string, number> = {};
+    const playersWithSnapshots: PlayerWithSnapshot[] = [];
+    
+    for (const player of allPlayers) {
+      // Get the most recent snapshot for this player
+      const latestSnapshot = await db.select()
+        .from(snapshots)
+        .where(eq(snapshots.playerId, player.id))
+        .orderBy(desc(snapshots.importDate))
+        .limit(1);
       
-      if (attributesData) {
-        const attrPairs = attributesData.split(',');
-        for (const pair of attrPairs) {
-          const [name, value] = pair.split(':');
-          if (name && value) {
-            attributes[name] = parseInt(value);
-          }
-        }
-      }
-
-      return {
-        id: row.id,
-        name: row.name,
-        age: row.age,
-        currentAbility: row.current_ability,
-        potentialAbility: row.potential_ability,
-        attributes,
-        snapshotId: row.snapshot_id,
-        importDate: new Date(row.import_date)
-      };
-    });
+      if (latestSnapshot.length === 0) continue;
+      
+      const snapshot = latestSnapshot[0];
+      
+      // Get all attributes for this snapshot
+      const snapshotAttributes = await db.select()
+        .from(attributes)
+        .where(eq(attributes.snapshotId, snapshot.id));
+      
+      const attributesMap: Record<string, number> = {};
+      snapshotAttributes.forEach(attr => {
+        attributesMap[attr.name] = attr.value;
+      });
+      
+      playersWithSnapshots.push({
+        id: player.id,
+        name: player.name,
+        age: player.age,
+        currentAbility: snapshot.currentAbility,
+        potentialAbility: snapshot.potentialAbility,
+        attributes: attributesMap,
+        snapshotId: snapshot.id,
+        importDate: snapshot.importDate
+      });
+    }
+    
+    // Sort by name
+    return playersWithSnapshots.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   public async getPlayerProgressHistory(playerId: number): Promise<{

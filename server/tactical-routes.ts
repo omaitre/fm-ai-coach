@@ -168,7 +168,7 @@ router.get("/analysis/tactic", async (req, res) => {
             analyzePlayers
           );
         } catch (error) {
-          console.warn(`Failed to analyze position ${position.positionCode}:`, error);
+          console.warn(`Failed to analyze position ${position.positionCode}-${position.role}-${position.duty}:`, error);
           return {
             positionCode: position.positionCode,
             role: position.role,
